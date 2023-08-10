@@ -31,6 +31,21 @@ const TODO_LIST = [
 export default function App() {
   const [todoList, setTodoList] = useState(TODO_LIST);
 
+  const updateTodo = (todo) => {
+    const updatedTodo = {
+      ...todo,
+      isCompleted : !todo.isCompleted
+    };
+
+    const index = todoList.findIndex((todo_) => todo_.id === updatedTodo.id);
+
+    const updatedTodoList = [...todoList]
+
+    updatedTodoList[index] = updatedTodo;
+
+    setTodoList(updatedTodoList)
+  }
+
   return (
     <>
       <SafeAreaProvider>
@@ -43,7 +58,7 @@ export default function App() {
                   {todoList.map((todo) => {
                     return (
                       <View style={style.cardItem} key={todo.id}>
-                        <CardTodo todo={todo} />
+                        <CardTodo onPress={updateTodo} todo={todo} />
                       </View>
                     )
                   })}
