@@ -3,7 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { style } from "./App.style";
 import { Header } from "./components/Header/Header";
 import { CardTodo } from "./components/CardTodo/CardTodo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Footer } from "./components/Footer/Footer";
 
 const TODO_LIST = [
@@ -31,7 +31,18 @@ const TODO_LIST = [
 
 export default function App() {
   const [todoList, setTodoList] = useState(TODO_LIST);
-  const [selectedTabName, setSeletedTabName] = useState('all')
+  const [selectedTabName, setSeletedTabName] = useState('all');
+
+  const getFilteredList = () => {
+    switch(selectedTabName) {
+      case 'all':
+        return todoList;
+      case 'inProgress': 
+        return todoList.filter(todo => !todo.isCompleted);
+      case 'done' :
+        return todoList.filter(todo => todo.isCompleted);
+    }
+  };
 
   const updateTodo = (todo) => {
     const updatedTodo = {
@@ -45,7 +56,7 @@ export default function App() {
 
     updatedTodoList[index] = updatedTodo;
 
-    setTodoList(updatedTodoList)
+    setTodoList(updatedTodoList);
   }
 
   return (
@@ -57,19 +68,23 @@ export default function App() {
             </View>
               <View style={style.body}>
                 <ScrollView>
-                  {todoList.map((todo) => {
+                  {getFilteredList().map((todo) => {
                     return (
                       <View style={style.cardItem} key={todo.id}>
                         <CardTodo onPress={updateTodo} todo={todo} />
                       </View>
                     )
                   })}
-                  </ScrollView>
+                </ScrollView>
               </View>
         </SafeAreaView>
       </SafeAreaProvider>
       <View style={style.footer}>
-        <Footer onPress={setSeletedTabName} selectedTabName={selectedTabName} />
+        <Footer 
+          onPress={setSeletedTabName} 
+          selectedTabName={selectedTabName} 
+          todoList={todoList}
+        />
       </View>
     </>
     

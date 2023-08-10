@@ -1,20 +1,29 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { style } from './Footer.style';
 
-export const Footer = ({ selectedTabName, onPress }) => {
+export const Footer = ({ selectedTabName, onPress, todoList }) => {
+
     function getTextStyle (tabName) {
         return { fontWeight : 'bold', color : tabName === selectedTabName ? "#2f76e5" : 'black'};
-    }
+    };
+
+    const countByStatus = todoList.reduce((acc, todo) => {
+        todo.isCompleted ? acc.done++ : acc.inProgress++;
+        return acc;
+    }, {
+        all : todoList.length, inProgress : 0, done: 0
+    });
+
     return (
         <View style={style.container}>
             <TouchableOpacity onPress={() => {onPress('all')}} >
-                <Text style={getTextStyle('all')}>All</Text>
+                <Text style={getTextStyle('all')}>All ({countByStatus.all})</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {onPress('inProgress')}} >
-                <Text style={getTextStyle('inProgress')}>In Progress</Text>
+                <Text style={getTextStyle('inProgress')}>In Progress ({countByStatus.inProgress}) </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {onPress('done')}}>
-                <Text style={getTextStyle('done')}>Done</Text>
+                <Text style={getTextStyle('done')}>Done ({countByStatus.done})</Text>
             </TouchableOpacity>
         </View>
     )
