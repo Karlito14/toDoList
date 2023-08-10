@@ -4,6 +4,7 @@ import { style } from "./App.style";
 import { Header } from "./components/Header/Header";
 import { CardTodo } from "./components/CardTodo/CardTodo";
 import { useState } from "react";
+import { Footer } from "./components/Footer/Footer";
 
 const TODO_LIST = [
   {
@@ -30,6 +31,7 @@ const TODO_LIST = [
 
 export default function App() {
   const [todoList, setTodoList] = useState(TODO_LIST);
+  const [selectedTabName, setSeletedTabName] = useState('all')
 
   const updateTodo = (todo) => {
     const updatedTodo = {
@@ -67,7 +69,7 @@ export default function App() {
         </SafeAreaView>
       </SafeAreaProvider>
       <View style={style.footer}>
-        <Text>Footer</Text>
+        <Footer onPress={setSeletedTabName} selectedTabName={selectedTabName} />
       </View>
     </>
     
